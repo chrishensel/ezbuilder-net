@@ -11,7 +11,8 @@
     <RootNamespace>ezBuilder</RootNamespace>
     <AssemblyName>ezBuilder</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -48,13 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildCompletionType.cs" />
-    <Compile Include="BuildLog.cs" />
-    <Compile Include="BuildResult.cs" />
-    <Compile Include="BuildStartArgs.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="ProjectNodes.cs" />
-    <Compile Include="IProjectBuildHandler.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,9 +78,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Resources\openfolderHS.png" />
     <None Include="Resources\109_AllAnnotations_Error_16x16_72.png" />
     <Content Include="SaveAllHS.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ezBuilder.Shared\ezBuilder.Shared.csproj">
+      <Project>{ACAA2FE0-FDEE-4684-8E63-39DF08A1DED2}</Project>
+      <Name>ezBuilder.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

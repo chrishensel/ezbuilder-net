@@ -3,6 +3,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using ezBuilder.Shared.Build;
+using ezBuilder.Shared.Core;
+using ezBuilder.Shared.Extensibility;
+using ezBuilder.Shared.Project;
 
 namespace ezBuilder
 {
@@ -98,7 +102,7 @@ namespace ezBuilder
         /// </summary>
         /// <param name="configuration">The <see cref="BuildConfiguration"/> representing what configuration to build.</param>
         /// <param name="args">The arguments to use for building.</param>
-        public void Start(BuildConfiguration configuration, BuildStartArgs args)
+        public void Start(BuildConfigurationNode configuration, BuildStartArgs args)
         {
             lock (LOCK)
             {
@@ -188,11 +192,11 @@ namespace ezBuilder
         {
             object[] parameters = (object[])parameter;
 
-            BuildConfiguration configuration = (BuildConfiguration)parameters[0];
+            BuildConfigurationNode configuration = (BuildConfigurationNode)parameters[0];
             BuildStartArgs args = (BuildStartArgs)parameters[1];
 
             // Process and build each item...
-            foreach (BuildItem buildItem in configuration.BuildItems)
+            foreach (BuildItemNode buildItem in configuration.BuildItems)
             {
                 BuildResult result = new BuildResult();
 

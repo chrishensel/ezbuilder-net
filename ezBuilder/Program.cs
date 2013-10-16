@@ -5,6 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using ezBuilder.Shared.Build;
+using ezBuilder.Shared.Core;
+using ezBuilder.Shared.Project;
 
 namespace ezBuilder
 {
@@ -40,9 +43,9 @@ namespace ezBuilder
 
                 Console.WriteLine("Parsing project file from {0}", bdprojFile);
 
-                Project project = new Project();
+                ProjectNode project = new ProjectNode();
                 project.Parse(bdprojFile);
-                BuildConfiguration configuration = project.Definitions.SelectMany(def => def.Configurations).FirstOrDefault(c => c.Name == _configuration);
+                BuildConfigurationNode configuration = project.Definitions.SelectMany(def => def.Configurations).FirstOrDefault(c => c.Name == _configuration);
                 if (configuration == null)
                 {
                     Console.WriteLine("Configuration {0} was not found!", _configuration);
@@ -94,7 +97,7 @@ namespace ezBuilder
             {
                 return;
             }
-            
+
             List<string> tmp = new List<string>(args);
             while (tmp.Count > 0)
             {

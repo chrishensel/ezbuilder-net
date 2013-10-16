@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using ezBuilder.Shared.Build;
+using ezBuilder.Shared.Core;
+using ezBuilder.Shared.Project;
 
 namespace ezBuilder
 {
@@ -13,7 +16,7 @@ namespace ezBuilder
     {
         #region Fields
 
-        private Project _project;
+        private ProjectNode _project;
         private ProjectBuildProcess _buildProcess;
 
         private bool _outputShowErrorsOnly = true;
@@ -72,7 +75,7 @@ namespace ezBuilder
                 return false;
             }
 
-            return trvList.SelectedNode.Tag is BuildConfiguration;
+            return trvList.SelectedNode.Tag is BuildConfigurationNode;
         }
 
         #endregion
@@ -94,7 +97,7 @@ namespace ezBuilder
 
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    _project = new Project();
+                    _project = new ProjectNode();
                     _project.Parse(dialog.FileName);
 
                     // build treeview
@@ -103,14 +106,14 @@ namespace ezBuilder
                     TreeNode tnProject = new TreeNode("Project [ '" + _project.Type + "' ]");
                     tnProject.Tag = _project;
                     tnProject.ForeColor = Color.Gray;
-                    foreach (BuildDefinition def in _project.Definitions)
+                    foreach (BuildDefinitionNode def in _project.Definitions)
                     {
                         TreeNode tnDefinition = new TreeNode(def.Name);
                         tnDefinition.ToolTipText = def.Description;
                         tnDefinition.Tag = def;
                         tnDefinition.ForeColor = Color.Gray;
 
-                        foreach (BuildConfiguration conf in def.Configurations)
+                        foreach (BuildConfigurationNode conf in def.Configurations)
                         {
                             TreeNode tnConfiguration = new TreeNode(conf.Name + " [ '" + conf.Configuration + "' ]");
                             tnConfiguration.Tag = conf;
@@ -139,7 +142,7 @@ namespace ezBuilder
                 return;
             }
 
-            BuildConfiguration configuration = trvList.SelectedNode.Tag as BuildConfiguration;
+            BuildConfigurationNode configuration = trvList.SelectedNode.Tag as BuildConfigurationNode;
             if (configuration == null)
             {
                 this.propertyGrid1.SelectedObject = null;
@@ -147,7 +150,7 @@ namespace ezBuilder
             }
             this.propertyGrid1.SelectedObject = configuration;
 
-            foreach (BuildItem item in configuration.BuildItems)
+            foreach (BuildItemNode item in configuration.BuildItems)
             {
                 clbBuildItems.Items.Add(new BuildItemEntry() { Item = item }, true);
             }
@@ -172,7 +175,7 @@ namespace ezBuilder
                 args.ItemsToBuild.Add(item.Item.Path);
             }
 
-            _buildProcess.Start((BuildConfiguration)trvList.SelectedNode.Tag, args);
+            _buildProcess.Start((BuildConfigurationNode)trvList.SelectedNode.Tag, args);
 
             tmrBuildTimer.Start();
         }
@@ -306,7 +309,7 @@ namespace ezBuilder
 
         class BuildItemEntry
         {
-            public BuildItem Item { get; set; }
+            public BuildItemNode Item { get; set; }
             public override string ToString()
             {
                 return string.IsNullOrWhiteSpace(Item.Name) ? Item.Path : Item.Name;

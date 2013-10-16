@@ -2,6 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using ezBuilder.Shared.Build;
+using ezBuilder.Shared.Extensibility;
+using ezBuilder.Shared.Project;
 
 namespace ezBuilder
 {
@@ -46,7 +49,7 @@ namespace ezBuilder
 
         #region Methods
 
-        private string GetConfiguration(string suggestedConfiguration, BuildItem buildItem)
+        private string GetConfiguration(string suggestedConfiguration, BuildItemNode buildItem)
         {
             if (buildItem.Data.ContainsKey("Configuration"))
             {
@@ -64,12 +67,12 @@ namespace ezBuilder
             get { return _isBuildInProgress; }
         }
 
-        BuildResult IProjectBuildHandler.Build(BuildItem buildItem)
+        BuildResult IProjectBuildHandler.Build(BuildItemNode buildItem)
         {
             _isBuildInProgress = true;
 
-            Project project = buildItem.Parent.Parent.Parent;
-            BuildConfiguration configuration = buildItem.Parent;
+            ProjectNode project = buildItem.Parent.Parent.Parent;
+            BuildConfigurationNode configuration = buildItem.Parent;
 
             string solutionFilePath = buildItem.GetFullPath();
             string workingDirectory = Path.GetDirectoryName(project.FileName);
@@ -114,7 +117,7 @@ namespace ezBuilder
             return result;
         }
 
-        private void PerformClean(BuildItem buildItem)
+        private void PerformClean(BuildItemNode buildItem)
         {
             string solutionFilePath = buildItem.GetFullPath();
             Process cleanProcess = new Process();
